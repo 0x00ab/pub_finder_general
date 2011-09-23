@@ -23,16 +23,29 @@ class Review
 
   property :id,          Serial    # An auto-increment integer key
   property :reviewer,    String
+  property :date,   Date
   property :text,        Text
 
   belongs_to :pub
 end
 
+class Reviewer
+  include DataMapper::Resource
+
+  property :id,          Serial    # An auto-increment integer key
+  property :name,	 String
+  property :text,        Text
+
+  belongs_to :pub
+  belongs_to :review
+  has n, :reviews
+end
+
 DataMapper.finalize
-DataMapper.auto_migrate! # Warning - this will wipe out any existing data in tables whose 
+# DataMapper.auto_migrate! # Warning - this will wipe out any existing data in tables whose 
                          # schema has changed. If this scares you, try .auto_upgrade! instead
 
-# DataMapper.auto_upgrade! # Will create new tables, and add columns where needed. 
+DataMapper.auto_upgrade! # Will create new tables, and add columns where needed. 
                            # It won't change column constraints or drop columns
 
 get '/' do
